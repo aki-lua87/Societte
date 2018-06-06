@@ -7,13 +7,12 @@ import (
 	"sync"
 
 	"github.com/ChimeraCoder/anaconda"
-	"github.com/garyburd/go-oauth/oauth"
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/urlfetch"
 )
 
 var (
-	credential    *oauth.Credentials
+	api 	  *anaconda.TwitterApi
 	exeCounter    int
 	deleteCounter int
 	userCount     int
@@ -21,19 +20,20 @@ var (
 
 // RequestTokenHandler リクエストトークンの取得
 func (s Societte) RequestTokenHandler(w http.ResponseWriter, r *http.Request) {
-	// ゴリラのおまじない
-	ctx := appengine.NewContext(r)
-	http.DefaultClient.Transport = &urlfetch.Transport{Context: ctx}
-
 	anaconda.SetConsumerKey(s.consumerKey)
 	anaconda.SetConsumerSecret(s.consumerSecret)
 
-	url, tmpCred, err := anaconda.AuthorizationURL("https://akakitune87.net/societte/callback")
+	// ゴリラのおまじない
+	api = anaconda.NewTwitterApi("", "")
+	c := appengine.NewContext(r)
+	api.HttpClient.Transport = &urlfetch.Transport{Context: c}
+
+	url, tmpCred, err := api.AuthorizationURL("https://akakitune87.net/societte/callback")
 	if err != nil {
 		fmt.Fprintf(w, "%v", err)
 		return
 	}
-	credential = tmpCred
+	api.Credentials = tmpCred
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
@@ -43,7 +43,7 @@ func (s Societte) AccessTokenHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := appengine.NewContext(r)
 	http.DefaultClient.Transport = &urlfetch.Transport{Context: ctx}
 
-	c, _, err := anaconda.GetCredentials(credential, r.URL.Query().Get("oauth_verifier"))
+	c, _, err := api.GetCredentials(api.Credentials, r.URL.Query().Get("oauth_verifier"))
 	if err != nil {
 		fmt.Fprintf(w, "%v", err)
 		return
