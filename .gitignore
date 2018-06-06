@@ -18,3 +18,4 @@ secret.yaml
 app.yaml
 cron.yaml
 views/
+.idea/
