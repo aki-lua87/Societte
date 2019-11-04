@@ -9,9 +9,10 @@ phases:
       - yarn --version
       - yarn global add serverless
       - serverless -v 
+      - type dep && dep version
   build:
     commands:
       - rm -rf ./bin ./vendor Gopkg.lock
       - dep ensure -v
-      - env GOOS=linux go build -ldflags="-s -w" -o bin/world world/main.go
+      - env GOOS=linux go build -ldflags="-s -w" -o bin/batch/delete batch/main.go
       - sls deploy --verbose --stage $target

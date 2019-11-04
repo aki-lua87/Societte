@@ -19,9 +19,8 @@ package:
    - ./bin/**
 
 functions:
-  world:
-    handler: bin/world
-    events:
-      - http:
-          path: world
-          method: get
+  delete_batch:
+    handler: bin/batch/delete
+    environment: 
+      CK: aaaaaaaaaaa
+      CS: bbbbbbbbbbb
