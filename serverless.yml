@@ -2,25 +2,64 @@ service: socie
 
 custom:
   stage: ${opt:stage,"default"}
+  db_name: gbf_twitter_token_${self:custom.stage}
 
 provider:
   name: aws
   runtime: go1.x
   region: ap-northeast-1
-  role: ${env:LAMBDA_IAM}
+  role: arn:aws:iam::879410899499:role/lambda_exec_pso2emaPut-1 # ${env:LAMBDA_IAM}
   tracing:
     apiGateway: true
     lambda: true
 
 package:
- exclude:
-   - ./**
- include:
-   - ./bin/**
+  exclude:
+    - ./**
+  include:
+    - ./bin/**
 
 functions:
+  request_token:
+    handler: bin/oath/request
+    environment: 
+      CONSUMER_KEY: ${env:CK}
+      CONSUMER_SECRET: ${env:CS}
+      CALLBACK_URL: ${env:CALLBACK_URL}
+    events:
+      - http:
+          path: /oath/request
+          method: get
+  access_token:
+    handler: bin/oath/access
+    environment: 
+      CONSUMER_KEY: ${env:CK}
+      CONSUMER_SECRET: ${env:CS}
+      TABLE_NAME: ${self:custom.db_name}
+    events:
+      - http:
+          path: /oath/callback
+          method: get
   delete_batch:
     handler: bin/batch/delete
     environment: 
-      CK: aaaaaaaaaaa
-      CS: bbbbbbbbbbb
+      CONSUMER_KEY: ${env:CK}
+      CONSUMER_SECRET: ${env:CS}
+      TABLE_NAME: ${self:custom.db_name}
+
+# DynamoDBを作る
+resources:
+  Resources:
+    pso2commonDB:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.db_name}
+        AttributeDefinitions:
+        - AttributeName: UserID
+          AttributeType: S
+        KeySchema:
+        - AttributeName: UserID
+          KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

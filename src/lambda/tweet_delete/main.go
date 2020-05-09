@@ -3,12 +3,17 @@ package main
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"net/url"
 	"os"
+	"strconv"
 	"sync"
 
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/guregu/dynamo"
 )
 
 var (
@@ -18,62 +23,59 @@ var (
 	userCount     int
 )
 
-// UserList aaa
-type UserList struct {
-	Uid string
-	At  string
-	Ats string
+func init() {
+
 }
 
-// Handler aaa
-func Handler(ctx context.Context) ([]UserList, error) {
-	users := getTokens(ctx)
+// Handler : main logic
+func Handler(ctx context.Context) error {
 
-	fmt.Println(users)
-	fmt.Println(os.Getenv("CK"))
+	// 初期設定
+	consumerKey := os.Getenv("CONSUMER_KEY")
+	consumerSecret := os.Getenv("CONSUMER_SECRET")
+	anaconda.SetConsumerKey(consumerKey)
+	anaconda.SetConsumerSecret(consumerSecret)
+	api = anaconda.NewTwitterApi("", "")
 
-	anaconda.SetConsumerKey(os.Getenv("CK"))
-	anaconda.SetConsumerSecret(os.Getenv("CS"))
+	// 削除対象ユーザデータを取得
+	users := getTokens()
 
+	// 削除ループ用カウンタ
 	exeCounter = 0
 	deleteCounter = 0
 	userCount = 0
 
+	// 地獄のループ
 	var wg sync.WaitGroup
 	for _, user := range users {
 		wg.Add(1)
-		go func(account UserList) {
+		go func(account UserData) {
 			defer wg.Done()
-			helpTweetDelete(account.At, account.Ats)
+			helpTweetDelete(account.Token, account.Secret)
+			fmt.Println(account.UID + "Done")
 		}(user)
 	}
 	wg.Wait()
+	fmt.Println(strconv.Itoa(exeCounter))
+	fmt.Println(strconv.Itoa(deleteCounter))
 
-	fmt.Println(exeCounter)
-	fmt.Println(deleteCounter)
-	fmt.Println(userCount)
-
-	return users, nil
+	return nil
 }
 
 func main() {
 	lambda.Start(Handler)
 }
 
-func getTokens(ctx context.Context) []UserList {
-	ulget := []UserList{}
-	// Dynamoから全権取得
-	// if _, err := g.GetAll(datastore.NewQuery("UserList"), &ulget); err != nil {
-	// 	fmt.Println(err.Error)
-	// }
-	return ulget
+type UserData struct {
+	UID    string `dynamo:"UserID"`
+	Token  string `dynamo:"Token"`
+	Secret string `dynamo:"Secret"`
 }
 
 // helpTweetDelete ツイートを取得し救援ツイートを削除
 func helpTweetDelete(at string, ats string) (bool, string) {
 
 	api := anaconda.NewTwitterApi(at, ats)
-	// api.HttpClient.Transport = trp
 
 	v := url.Values{}
 	v.Set("count", "150")
@@ -104,4 +106,17 @@ func helpTweetDelete(at string, ats string) (bool, string) {
 	wgDelete.Wait()
 
 	return result, errText
+}
+
+func getTokens(r *http.Request) ([]UserData, error) {
+	db := dynamo.New(session.New(), &aws.Config{
+		Region: aws.String("ap-northeast-1"),
+	})
+	table := db.Table(os.Getenv("DB_NAME"))
+	var results []UserData
+	err := table.Scan().All(&results)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
 }
