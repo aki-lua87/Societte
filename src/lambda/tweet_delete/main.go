@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"net/url"
 	"os"
 	"strconv"
@@ -38,7 +37,10 @@ func Handler(ctx context.Context) error {
 	api = anaconda.NewTwitterApi("", "")
 
 	// 削除対象ユーザデータを取得
-	users := getTokens()
+	users, err := getTokens()
+	if err != nil {
+		return err
+	}
 
 	// 削除ループ用カウンタ
 	exeCounter = 0
@@ -108,7 +110,7 @@ func helpTweetDelete(at string, ats string) (bool, string) {
 	return result, errText
 }
 
-func getTokens(r *http.Request) ([]UserData, error) {
+func getTokens() ([]UserData, error) {
 	db := dynamo.New(session.New(), &aws.Config{
 		Region: aws.String("ap-northeast-1"),
 	})

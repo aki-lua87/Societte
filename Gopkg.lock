@@ -129,14 +129,6 @@
   version = "v3.3.0"
 
 [[projects]]
-  digest = "1:d1e35b720b5f5156502ffdd174000c81295919293735342da78582e4dc7a8bcd"
-  name = "github.com/golang/protobuf"
-  packages = ["proto"]
-  pruneopts = "UT"
-  revision = "5d5b4c10bd43f85e63bd9e4a3fa9b1ea2ef88af2"
-  version = "v1.3.4"
-
-[[projects]]
   digest = "1:482a75116b8cbe50ef6f02ce2014d0856e0a024c40df340f45e400cfd1bfb27b"
   name = "github.com/guregu/dynamo"
   packages = [
@@ -155,61 +147,12 @@
   revision = "c2b33e84"
 
 [[projects]]
-  digest = "1:ab57828326110a25fb9595d052fea82d6919bc3126f1afdf03a01aae3e8976d2"
-  name = "github.com/mjibson/goon"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "f11c501d43982ad5e4a663e0f6e2c2e14a3f88f5"
-  version = "v1.0.0"
-
-[[projects]]
-  branch = "master"
-  digest = "1:73f9bd0a36bd49a7a46061dd5d6370fbf7c7afcd92a31dcb18661497610672aa"
-  name = "golang.org/x/crypto"
-  packages = ["blake2b"]
-  pruneopts = "UT"
-  revision = "78000ba7a073cafc0278790f6bce552a0f25850e"
-
-[[projects]]
   branch = "master"
   digest = "1:76ee51c3f468493aff39dbacc401e8831fbb765104cbf613b89bef01cf4bad70"
   name = "golang.org/x/net"
   packages = ["context"]
   pruneopts = "UT"
   revision = "244492dfa37ae2ce87222fd06250a03160745faa"
-
-[[projects]]
-  branch = "master"
-  digest = "1:0110babbeb34e338aca6f831fcd8c4eb32a5e5844ca1b8d25a95a56308028e53"
-  name = "golang.org/x/sys"
-  packages = ["cpu"]
-  pruneopts = "UT"
-  revision = "5c8b2ff67527cb88b770f693cebf3799036d8bc0"
-
-[[projects]]
-  digest = "1:eca9302a680e7a0ffa90763e410213a0429a0e777b97b48835f924a2b7c0c338"
-  name = "google.golang.org/appengine"
-  packages = [
-    ".",
-    "datastore",
-    "datastore/internal/cloudkey",
-    "datastore/internal/cloudpb",
-    "internal",
-    "internal/app_identity",
-    "internal/base",
-    "internal/datastore",
-    "internal/log",
-    "internal/memcache",
-    "internal/modules",
-    "internal/remote_api",
-    "internal/urlfetch",
-    "log",
-    "memcache",
-    "urlfetch",
-  ]
-  pruneopts = "UT"
-  revision = "971852bfffca25b069c31162ae8f247a3dba083b"
-  version = "v1.6.5"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -221,10 +164,6 @@
     "github.com/aws/aws-sdk-go/aws",
     "github.com/aws/aws-sdk-go/aws/session",
     "github.com/guregu/dynamo",
-    "github.com/mjibson/goon",
-    "google.golang.org/appengine",
-    "google.golang.org/appengine/datastore",
-    "google.golang.org/appengine/urlfetch",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

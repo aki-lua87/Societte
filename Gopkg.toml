@@ -33,14 +33,6 @@
   name = "github.com/aws/aws-lambda-go"
   version = "1.15.0"
 
-[[constraint]]
-  name = "github.com/mjibson/goon"
-  version = "1.0.0"
-
-[[constraint]]
-  name = "google.golang.org/appengine"
-  version = "1.6.5"
-
 [prune]
   go-tests = true
   unused-packages = true
