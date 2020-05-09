@@ -48,15 +48,19 @@ func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (Respon
 	me, _ := api.GetSelf(url.Values{})
 
 	// DBへユーザ情報保存
-	err = putTokens(me.IdStr, c.Token, c.Secret)
+	err = putTokens(me.IdStr, me.ScreanName, c.Token, c.Secret)
 	if err != nil {
 		return Response{StatusCode: 500}, err
 	}
 
+	html := `<!DOCTYPE html><html><head><meta charset="utf-8"/></head><body>`
+	html += `<br> 登録されました <br>`
+	html += `</body></html>`
+
 	resp := Response{
 		StatusCode:      200,
 		IsBase64Encoded: false,
-		Body:            me.IdStr + "|||" + c.Token + "|||" + c.Secret,
+		Body:            html,
 		Headers: map[string]string{
 			"Content-Type": "text/html",
 		},
@@ -69,11 +73,12 @@ func main() {
 	lambda.Start(Handler)
 }
 
-func putTokens(id string, token string, tokenSeaclet string) error {
+func putTokens(id string, screanName string, token string, tokenSeaclet string) error {
 	userData := UserData{
-		UID:    id,
-		Token:  token,
-		Secret: tokenSeaclet,
+		UID:        id,
+		ScreanName: screanName,
+		Token:      token,
+		Secret:     tokenSeaclet,
 	}
 	db := dynamo.New(session.New(), &aws.Config{
 		Region: aws.String("ap-northeast-1"),
@@ -87,7 +92,8 @@ func putTokens(id string, token string, tokenSeaclet string) error {
 }
 
 type UserData struct {
-	UID    string `dynamo:"UserID"`
-	Token  string `dynamo:"Token"`
-	Secret string `dynamo:"Secret"`
+	UID        string `dynamo:"UserID"`
+	ScreanName string `dynamo:"ScreanName"`
+	Token      string `dynamo:"Token"`
+	Secret     string `dynamo:"Secret"`
 }

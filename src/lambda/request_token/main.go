@@ -52,8 +52,12 @@ func Handler(ctx context.Context) (Response, error) {
 	json.HTMLEscape(&buf, body)
 
 	html := `<!DOCTYPE html><html><head><meta charset="utf-8"/></head><body>`
-	html += `<br> <a href="` + url + `">Twitter ログイン</a> <br>`
-	// html += buf.String()
+	html += `<h2> グラブルの救援ツイート消すツール(0.0.1α版) </h2>`
+	html += `<br> Twitter認証すると 定期的に ツイートを探索し グラブルの救援ツイート(AP/BP回復ツイート含む) を削除します`
+	html += `<br><br> <a href="` + url + `">Twitter ログイン</a>`
+	html += `<br>`
+	html += `<br> ※運悪くタイミングが被ると救援出した直後に削除されてしまいます。`
+	html += `<br> ※登録解除は「設定」「アプリとセッション」から「グラブル救援ツイートクリーナー」を削除してください。`
 	html += `</body></html>`
 
 	resp := Response{

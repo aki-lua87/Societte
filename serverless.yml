@@ -46,6 +46,8 @@ functions:
       CONSUMER_KEY: ${env:CK}
       CONSUMER_SECRET: ${env:CS}
       DB_NAME: ${self:custom.db_name}
+    events:
+      - schedule: cron(0 * * * ? *)
 
 # DynamoDBを作る
 resources:
