@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+      golang: 1.13
+    commands:
+      - yarn --version
+      - yarn global add serverless
+      - serverless -v 
+      - type dep && dep version
+  build:
+    commands:
+      - rm -rf ./bin ./vendor # Gopkg.lock
+      - dep ensure -v
+      - env GOOS=linux go build -ldflags="-s -w" -o bin/batch/delete src/lambda/tweet_delete/main.go
+      - env GOOS=linux go build -ldflags="-s -w" -o bin/oath/request src/lambda/request_token/main.go
+      - env GOOS=linux go build -ldflags="-s -w" -o bin/oath/access src/lambda/access_token/main.go
+      - sls deploy --verbose --stage $target

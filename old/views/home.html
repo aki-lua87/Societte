@@ -1,0 +1,21 @@
+{{ define "content" }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <div class="container">
+        <h2> 画像付きのゲームツイートを消す奴 <br><small>体力回復ツイートとかマルチ募集ツイートを消します。</small></h2>
+        <div class="setumei">
+            <p>イラストや写真をアップする方など、画像欄がゲーム画像で埋まりたくないという場合にご利用ください。(現在はグラブルのみを対象)</p>
+            <br>
+            <p>1時間毎に実行され、過去150ツイートくらいから当該ツイートを探してツイ消しします。</p>
+            <br>
+            <p>ま本サービスをご利用になって生じたトラブル・不利益に関しましては、一切保証致しかねます。</p>
+            <p>登録解除はツイッターサイトより連係解除をお願いします。</p>
+            <br>
+            <p>ご意見、要望などあれば<a href="https://twitter.com/aki_lua87">@aki_lua87</a>(Twitter)までご連絡ください。</p>
+            <p>{{ .Name }}</p>
+        </div>
+        <button class="btn btn-success" onclick="location.href='https://akakitune87.net/societte/request'" style="margin:4px">登録</button>
+        <!-- <a href="./history.html">変更履歴</a> -->
+        
+    </div>
+{{ end }}
