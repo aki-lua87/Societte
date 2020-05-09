@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"os"
 
@@ -56,6 +57,8 @@ func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (Respon
 	html := `<!DOCTYPE html><html><head><meta charset="utf-8"/></head><body>`
 	html += `<br> 登録されました <br>`
 	html += `</body></html>`
+
+	fmt.Println(me.ScreenName + " Register")
 
 	resp := Response{
 		StatusCode:      200,
