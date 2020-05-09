@@ -50,7 +50,7 @@ func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (Respon
 	// DBへユーザ情報保存
 	err = putTokens(me.IdStr, c.Token, c.Secret)
 	if err != nil {
-		return nil, err
+		return Response{StatusCode: 500}, err
 	}
 
 	resp := Response{
