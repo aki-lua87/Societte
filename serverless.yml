@@ -7,6 +7,8 @@ custom:
 provider:
   name: aws
   runtime: go1.x
+  memorySize: 256
+  timeout: 15
   region: ap-northeast-1
   role: ${env:LAMBDA_IAM}
   tracing:
@@ -45,6 +47,8 @@ functions:
           method: get
   delete_batch:
     handler: bin/batch/delete
+    memorySize: 2048
+    timeout: 600
     environment: 
       CONSUMER_KEY: ${env:CK}
       CONSUMER_SECRET: ${env:CS}
