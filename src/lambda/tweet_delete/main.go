@@ -54,7 +54,7 @@ func Handler(ctx context.Context) error {
 		go func(account UserData) {
 			defer wg.Done()
 			helpTweetDelete(account.Token, account.Secret)
-			fmt.Println(account.ScreanName + " Done")
+			fmt.Println(account.ScreenName + " Done")
 		}(user)
 	}
 	wg.Wait()
@@ -70,7 +70,7 @@ func main() {
 
 type UserData struct {
 	UID        string `dynamo:"UserID"`
-	ScreanName string `dynamo:"ScreanName"`
+	ScreenName string `dynamo:"ScreenName"`
 	Token      string `dynamo:"Token"`
 	Secret     string `dynamo:"Secret"`
 }

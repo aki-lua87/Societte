@@ -48,7 +48,7 @@ func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (Respon
 	me, _ := api.GetSelf(url.Values{})
 
 	// DBへユーザ情報保存
-	err = putTokens(me.IdStr, me.ScreanName, c.Token, c.Secret)
+	err = putTokens(me.IdStr, me.ScreenName, c.Token, c.Secret)
 	if err != nil {
 		return Response{StatusCode: 500}, err
 	}
@@ -76,7 +76,7 @@ func main() {
 func putTokens(id string, screanName string, token string, tokenSeaclet string) error {
 	userData := UserData{
 		UID:        id,
-		ScreanName: screanName,
+		ScreenName: screanName,
 		Token:      token,
 		Secret:     tokenSeaclet,
 	}
@@ -93,7 +93,7 @@ func putTokens(id string, screanName string, token string, tokenSeaclet string) 
 
 type UserData struct {
 	UID        string `dynamo:"UserID"`
-	ScreanName string `dynamo:"ScreanName"`
+	ScreenName string `dynamo:"ScreenName"`
 	Token      string `dynamo:"Token"`
 	Secret     string `dynamo:"Secret"`
 }
