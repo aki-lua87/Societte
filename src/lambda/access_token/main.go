@@ -48,7 +48,10 @@ func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (Respon
 	me, _ := api.GetSelf(url.Values{})
 
 	// DBへユーザ情報保存
-	putTokens(me.IdStr, c.Token, c.Secret)
+	err = putTokens(me.IdStr, c.Token, c.Secret)
+	if err != nil {
+		return nil, err
+	}
 
 	resp := Response{
 		StatusCode:      200,

@@ -8,7 +8,7 @@ provider:
   name: aws
   runtime: go1.x
   region: ap-northeast-1
-  role: arn:aws:iam::879410899499:role/lambda_exec_pso2emaPut-1 # ${env:LAMBDA_IAM}
+  role: ${env:LAMBDA_IAM}
   tracing:
     apiGateway: true
     lambda: true
@@ -35,7 +35,7 @@ functions:
     environment: 
       CONSUMER_KEY: ${env:CK}
       CONSUMER_SECRET: ${env:CS}
-      TABLE_NAME: ${self:custom.db_name}
+      DB_NAME: ${self:custom.db_name}
     events:
       - http:
           path: /oath/callback
@@ -45,7 +45,7 @@ functions:
     environment: 
       CONSUMER_KEY: ${env:CK}
       CONSUMER_SECRET: ${env:CS}
-      TABLE_NAME: ${self:custom.db_name}
+      DB_NAME: ${self:custom.db_name}
 
 # DynamoDBを作る
 resources:
