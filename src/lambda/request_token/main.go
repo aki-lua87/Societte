@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
 
@@ -33,23 +31,23 @@ func Handler(ctx context.Context) (Response, error) {
 
 	callbackURL := os.Getenv("CALLBACK_URL")
 	fmt.Println(callbackURL)
-	url, tmpCred, err := api.AuthorizationURL(callbackURL)
+	url, _, err := api.AuthorizationURL(callbackURL)
 	if err != nil {
 		return Response{StatusCode: 500}, err
 	}
 
 	// ここからそのまま
-	var buf bytes.Buffer
+	// var buf bytes.Buffer
 
-	body, err := json.Marshal(map[string]interface{}{
-		"message": "Okay so your other function also executed successfully!",
-		"tmpCred": tmpCred,
-		"url":     url,
-	})
-	if err != nil {
-		return Response{StatusCode: 500}, err
-	}
-	json.HTMLEscape(&buf, body)
+	// body, err := json.Marshal(map[string]interface{}{
+	// 	"message": "Okay so your other function also executed successfully!",
+	// 	"tmpCred": tmpCred,
+	// 	"url":     url,
+	// })
+	// if err != nil {
+	// 	return Response{StatusCode: 500}, err
+	// }
+	// json.HTMLEscape(&buf, body)
 
 	html := `<!DOCTYPE html><html><head><meta charset="utf-8"/></head><body>`
 	html += `<h2> グラブルの救援ツイート消すツール(0.0.1α版) </h2>`

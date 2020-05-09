@@ -30,6 +30,9 @@ functions:
       - http:
           path: /oath/request
           method: get
+      - http:
+          path: /societte
+          method: get
   access_token:
     handler: bin/oath/access
     environment: 

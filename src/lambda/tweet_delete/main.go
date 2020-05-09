@@ -98,6 +98,7 @@ func helpTweetDelete(at string, ats string) (bool, string) {
 			gu := `<a href="http://granbluefantasy.jp/" rel="nofollow">グランブルー ファンタジー</a>`
 			if tweet.Source == gu {
 				_, err := api.DeleteTweet(tweet.Id, false)
+				fmt.Println("Tweet hits abd delete Done")
 				if err != nil {
 					errText = errText + err.Error()
 					result = false
