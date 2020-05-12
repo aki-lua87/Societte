@@ -49,7 +49,15 @@ func Handler(ctx context.Context) (Response, error) {
 	// }
 	// json.HTMLEscape(&buf, body)
 
-	html := `<!DOCTYPE html><html><head><meta charset="utf-8"/></head><body>`
+	html := `<!DOCTYPE html><html>`
+	html += `<head>`
+	html += `<meta charset="utf-8"/>`
+	html += `<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">`
+	html += `<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>`
+	html += `<meta name="viewport" content="width=device-width, initial-scale=0.9">`
+	html += `<title>グラブルの救援ツイート消すツール</title>`
+	html += `</head>`
+	html += `<body>`
 	html += `<h2> グラブルの救援ツイート消すツール(0.0.1α版) </h2>`
 	html += `<br> Twitter認証すると 定期的に ツイートを探索し グラブルの救援ツイート(AP/BP回復ツイート含む) を削除します`
 	html += `<br><br> <a href="` + url + `">Twitter ログイン</a>`

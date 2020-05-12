@@ -54,7 +54,15 @@ func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (Respon
 		return Response{StatusCode: 500}, err
 	}
 
-	html := `<!DOCTYPE html><html><head><meta charset="utf-8"/></head><body>`
+	html := `<!DOCTYPE html><html>`
+	html += `<head>`
+	html += `<meta charset="utf-8"/>`
+	html += `<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">`
+	html += `<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>`
+	html += `<meta name="viewport" content="width=device-width, initial-scale=0.9">`
+	html += `<title>グラブルの救援ツイート消すツール</title>`
+	html += `</head>`
+	html += `<body>`
 	html += `<br> 登録されました <br>`
 	html += `</body></html>`
 

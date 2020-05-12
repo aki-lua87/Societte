@@ -53,7 +53,7 @@ func Handler(ctx context.Context) error {
 		wg.Add(1)
 		go func(account UserData) {
 			defer wg.Done()
-			helpTweetDelete(account.Token, account.Secret)
+			helpTweetDelete(account.Token, account.Secret, account.ScreenName)
 			fmt.Println(account.ScreenName + " Done")
 		}(user)
 	}
@@ -76,17 +76,20 @@ type UserData struct {
 }
 
 // helpTweetDelete ツイートを取得し救援ツイートを削除
-func helpTweetDelete(at string, ats string) (bool, string) {
+func helpTweetDelete(at string, ats string, name string) (bool, string) {
 
 	api := anaconda.NewTwitterApi(at, ats)
+	errText := "Error:"
+	result := true
 
 	v := url.Values{}
 	v.Set("count", "150")
 
-	tweetList, _ := api.GetUserTimeline(v)
-
-	errText := "Error:"
-	result := true
+	tweetList, err := api.GetUserTimeline(v)
+	if err != nil {
+		fmt.Println(name + ":Timeline Get Error")
+		return false, "Error"
+	}
 
 	var wgDelete sync.WaitGroup
 	for _, t := range tweetList {
@@ -98,7 +101,7 @@ func helpTweetDelete(at string, ats string) (bool, string) {
 			gu := `<a href="http://granbluefantasy.jp/" rel="nofollow">グランブルー ファンタジー</a>`
 			if tweet.Source == gu {
 				_, err := api.DeleteTweet(tweet.Id, false)
-				fmt.Println("Tweet hits abd delete Done")
+				fmt.Println("Tweet hits and delete Done")
 				if err != nil {
 					errText = errText + err.Error()
 					result = false
